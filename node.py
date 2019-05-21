@@ -5,7 +5,7 @@ from flask_cors import CORS
 from wallet import Wallet
 from blockchain import Blockchain
 
-#Конструктор 
+#Конструктор
 app = Flask(__name__)
 CORS(app)
 
@@ -19,7 +19,7 @@ def get_node_ui():
 def get_network_ui():
     return send_from_directory('ui', 'network.html')
 
-#Создание профиля 
+#Создание профиля
 @app.route('/wallet', methods=['POST'])
 def create_keys():
     #Создание ключей
@@ -83,17 +83,17 @@ def get_balance():
 def broadcast_transaction():
     values = request.get_json()
     if not values:
-        response = {'message': 'No data found.'}
+        response = {'message': 'Данных не найденно.'}
         return jsonify(response), 400
     required = ['sender', 'recipient', 'amount', 'signature']
     if not all(key in values for key in required):
-        response = {'message': 'Some data is missing.'}
+        response = {'message': 'Данные потерянны.'}
         return jsonify(response), 400
     success = blockchain.add_transaction(
         values['recipient'], values['sender'], values['signature'], values['amount'], is_receiving=True)
     if success:
         response = {
-            'message': 'Successfully added transaction.',
+            'message': 'Успешно добавлена транзакция.',
             'transaction': {
                 'sender': values['sender'],
                 'recipient': values['recipient'],
@@ -113,25 +113,25 @@ def broadcast_transaction():
 def broadcast_block():
     values = request.get_json()
     if not values:
-        response = {'message': 'No data found.'}
+        response = {'message': 'Данных не найденно.'}
         return jsonify(response), 400
     if 'block' not in values:
-        response = {'message': 'Some data is missing.'}
+        response = {'message': 'Данные потерянны.'}
         return jsonify(response), 400
     block = values['block']
     if block['index'] == blockchain.chain[-1].index + 1:
         if blockchain.add_block(block):
-            response = {'message': 'Block added'}
+            response = {'message': 'Блок добавлен'}
             return jsonify(response), 201
         else:
-            response = {'message': 'Block seems invalid.'}
+            response = {'message': 'Блок недействительный.'}
             return jsonify(response), 409
     elif block['index'] > blockchain.chain[-1].index:
-        response = {'message': 'Blockchain seems to differ from local blockchain.'}
+        response = {'message': 'Блокчейн, кажется, отличается от локального блокчейна.'}
         blockchain.resolve_conflicts = True
         return jsonify(response), 200
-    else: 
-        response = {'message': 'Blockchain seems to be shorter, block not added'}
+    else:
+        response = {'message': 'Блокчейн меньше оригинального, блок не добавлен'}
         return jsonify(response), 409
 
 
@@ -149,7 +149,7 @@ def add_transaction():
             'message': 'Данных(JSON) не найдено.'
         }
         return jsonify(response), 400
-    #Проверяем, существуют ли все эти два поля    
+    #Проверяем, существуют ли все эти два поля
     required_fields = ['recipient', 'amount']
     #Если нет, то пишем ошибку
     if not all(field in values for field in required_fields):
@@ -161,7 +161,7 @@ def add_transaction():
     amount = values['amount']
     #Подписывает под транзакцию
     signature = wallet.sign_transaction(wallet.public_key, recipient, amount)
-    
+
     success = blockchain.add_transaction(
         recipient, wallet.public_key, signature, amount)
     if success:
@@ -189,9 +189,9 @@ def mine():
         response = {'message': 'Блок не был добавлен, сначала решите конфликт!'}
         return jsonify(response), 409
     block = blockchain.mine_block()
-    #Если у нас есть профиль/wallet 
+    #Если у нас есть профиль/wallet
     if block != None:
-        #Конвертация блока в дикт 
+        #Конвертация блока в дикт
         dict_block = block.__dict__.copy()
         dict_block['transactions'] = [
             tx.__dict__ for tx in dict_block['transactions']]
@@ -201,7 +201,7 @@ def mine():
             'funds': blockchain.get_balance()
         }
         return jsonify(response), 201
-    
+
     else:
         response = {
             'message': 'Добавление блока не удалось.',
@@ -214,9 +214,9 @@ def mine():
 def resolve_conflicts():
     replaced = blockchain.resolve()
     if replaced:
-        response = {'message': 'Chain was replaced!'}
+        response = {'message': 'Цепь была заменена!'}
     else:
-        response = {'message': 'Local chain kept!'}
+        response = {'message': 'Локальная цепь сохранена!'}
     return jsonify(response), 200
 
 #Показ всех транзакций
@@ -242,18 +242,18 @@ def add_node():
     values = request.get_json()
     if not values:
         response = {
-            'message': 'No data attached.'
+            'message': 'Данных нет.'
         }
         return jsonify(response), 400
     if 'node' not in values:
         response = {
-            'message': 'No node data found.'
+            'message': 'Данные узла не найденны.'
         }
         return jsonify(response), 400
     node = values['node']
     blockchain.add_peer_node(node)
     response = {
-        'message': 'Node added successfully.',
+        'message'  : 'Узлы добавленны успешно.',
         'all_nodes': blockchain.get_peer_nodes()
     }
     return jsonify(response), 201
@@ -263,12 +263,12 @@ def add_node():
 def remove_node(node_url):
     if node_url == '' or node_url == None:
         response = {
-            'message': 'No node found.'
+            'message': 'Узлы не найдены.'
         }
         return jsonify(response), 400
     blockchain.remove_peer_node(node_url)
     response = {
-        'message': 'Node removed',
+        'message': 'Узел удален',
         'all_nodes': blockchain.get_peer_nodes()
     }
     return jsonify(response), 200

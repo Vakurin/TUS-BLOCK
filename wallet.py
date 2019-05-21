@@ -56,9 +56,9 @@ class Wallet:
         """Подписывает транзакцию и возращает подпись
 
         Arguments:
-            :sender: Отправитель транзакции
+            :sender:    Отправитель транзакции
             :recipient: Получатель.
-            :amount: Оценка.
+            :amount:    Оценка.
         """
         signer = PKCS1_v1_5.new(RSA.importKey(binascii.unhexlify(self.private_key)))
         h = SHA256.new((str(sender) + str(recipient) + str(amount)).encode('utf8'))
@@ -68,7 +68,7 @@ class Wallet:
     @staticmethod
     def verify_transaction(transaction):
         """ Подтвержает подписью транзакцию
-        
+
 
         Arguments:
             :transaction: Транзакция должна быть подтверждена.

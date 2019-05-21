@@ -12,7 +12,7 @@ from block import Block
 from transaction import Transaction
 from wallet import Wallet
 
-# Награда которую мы даем майнерам(за создание нового блока)
+# Награда, которую мы даем за создаение блока
 MINING_REWARD = 10
 
 print(__name__)
@@ -22,13 +22,13 @@ class Blockchain:
     """Класс Blockchain управляет цепочкой блоков, а также открытыми транзакциями и узлом, на котором он работает.
 
     Attributes:
-        :chain: Лист блоков 
-        :open_transactions (private): Лист открытых транзакций 
+        :chain: Лист блоков
+        :open_transactions (private): Лист открытых транзакций
         :hosting_node: Подключенные узлы.
     """
 
     def __init__(self, public_key, node_id):
-        """The constructor of the Blockchain class."""
+        """Конструктор класса Blockchain."""
         # Наш начальный блок блокчейна
         genesis_block = Block(0, '', [], 100, 0)
         # Инициалицация (пустого) блокчейн листа
@@ -41,7 +41,7 @@ class Blockchain:
         self.resolve_conflicts = False
         self.load_data()
 
-    
+
     @property
     def chain(self):
         return self.__chain[:]
