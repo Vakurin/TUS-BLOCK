@@ -1,4 +1,4 @@
-# blockGovna
+# Tus Block
 
 # Чтобы запустить проект, надо запустить node.py
 * python3 node.py
