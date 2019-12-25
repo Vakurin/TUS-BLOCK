@@ -13,6 +13,8 @@ Write in terminal:
 
 **git clone https://github.com/Vakurin/TUS-BLOCK.git**
 
+---
+
 ### **Create Virtualenv**
 
 Install virtualenv package:
@@ -33,10 +35,13 @@ For windows:
 After finish work, you need deactivate your env:
 * **deactivate**
 
+----
+
 ### **After Activate VirtualEnv, You Nedd Install All Dependencies:**
 
 * **pip3 install -r requirements.txt**
 
+----
 
 ### **Start Project**
 * python3 node.py
