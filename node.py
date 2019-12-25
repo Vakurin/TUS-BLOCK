@@ -5,7 +5,7 @@ from flask_cors import CORS
 from wallet import Wallet
 from blockchain import Blockchain
 
-#Конструктор
+#Конструктор (обязательный для Flask)
 app = Flask(__name__)
 CORS(app)
 
@@ -258,7 +258,7 @@ def add_node():
     }
     return jsonify(response), 201
 
-
+#Удаление узла 
 @app.route('/node/<node_url>', methods=['DELETE'])
 def remove_node(node_url):
     if node_url == '' or node_url == None:
@@ -273,7 +273,7 @@ def remove_node(node_url):
     }
     return jsonify(response), 200
 
-
+#Все узлы 
 @app.route('/nodes', methods=['GET'])
 def get_nodes():
     nodes = blockchain.get_peer_nodes()
@@ -282,12 +282,14 @@ def get_nodes():
     }
     return jsonify(response), 200
 
+### Запуск 
+### python3 node.py -p номер_порта
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
     parser = ArgumentParser()
     #################################№№№№№№№№№№№№№№ ПОРТ
-    parser.add_argument('-p', '--port', type=int, default=5004)
+    parser.add_argument('-p', '--port', type=int, default=5005)
     args = parser.parse_args()
     port = args.port
     wallet = Wallet(port)

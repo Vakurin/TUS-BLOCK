@@ -104,7 +104,7 @@
             <hr>
             <div v-if="!wallet" class="row">
                 <div class="col">
-                    <div class="alert alert-warning">Создайте профиль и отправьте коины или начните майнить!</div>
+                    <div class="alert alert-warning">Создайте профиль и отправьте коины!</div>
                 </div>
             </div>
             <div v-if="wallet" class="row">
@@ -145,7 +145,7 @@
             <div class="row my-3">
                 <div class="col">
                     <button class="btn btn-primary" @click="onLoadData">{{ view === 'chain' ? 'Загрузить Blockchain' : 'Загрузить Транзакции' }}</button>
-                    <button v-if="view === 'chain' && wallet" class="btn btn-success" @click="onMine">Получить коины</button>
+                    <button v-if="view === 'chain' && wallet" class="btn btn-success" @click="onMine">Добавить новый блок</button>
                     <button class="btn btn-warning" @click="onResolve">Решить конфликт</button>
                 </div>
             </div>

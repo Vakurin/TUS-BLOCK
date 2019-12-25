@@ -81,6 +81,7 @@ class Blockchain:
                         tx['sender'], tx['recipient'], tx['signature'], tx['amount'])
                     updated_transactions.append(updated_transaction)
                 self.__open_transactions = updated_transactions
+                #Загрузка узлов
                 peer_nodes = json.loads(file_content[2])
                 self.__peer_nodes = set(peer_nodes)
         except (IOError, IndexError):
@@ -99,6 +100,7 @@ class Blockchain:
                 saveable_tx = [tx.__dict__ for tx in self.__open_transactions]
                 f.write(json.dumps(saveable_tx))
                 f.write('\n')
+                #Сохранение узлов 
                 f.write(json.dumps(list(self.__peer_nodes)))
                 # save_data = {
                 #     'chain': blockchain,
@@ -201,13 +203,8 @@ class Blockchain:
         hashed_block = hash_block(last_block)
         proof = self.proof_of_work()
         # Miners should be rewarded, so let's create a reward transaction
-        # reward_transaction = {
-        #     'sender': 'MINING',
-        #     'recipient': owner,
-        #     'amount': MINING_REWARD
-        # }
         reward_transaction = Transaction(
-            'MINING', self.public_key, '', MINING_REWARD)
+            'MAXIM', self.public_key, '', MINING_REWARD)
         # Copy transaction instead of manipulating the original open_transactions list
         # This ensures that if for some reason the mining should fail, we don't have the reward transaction stored in the open transactions
         copied_transactions = self.__open_transactions[:]
@@ -297,23 +294,23 @@ class Blockchain:
         return replace
 
     def add_peer_node(self, node):
-        """Adds a new node to the peer node set.
+        """ Добавляет новые узлы .
 
         Arguments:
-            :node: The node URL which should be added.
+            :node: URL узла который должен быть добавлен.
         """
         self.__peer_nodes.add(node)
         self.save_data()
 
     def remove_peer_node(self, node):
-        """Removes a node from the peer node set.
+        """Убрать узел.
 
         Arguments:
-            :node: The node URL which should be removed.
+            :node: URL узла который должен быть удален.
         """
         self.__peer_nodes.discard(node)
         self.save_data()
 
     def get_peer_nodes(self):
-        """Return a list of all connected peer nodes."""
+        """Возращается лист всех подключенных узлов."""
         return list(self.__peer_nodes)
